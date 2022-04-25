@@ -1,5 +1,0 @@
-﻿VERIFICATION
-CDisplayEx is free proprietary software. It is available to download for free, however the architecture of the official site makes it difficult to predict the .exe file's URL.
-
-Hence, you can compare the checksum of the given install executable URL with the official install executables available here:
-http://www.cdisplayex.com/downloads

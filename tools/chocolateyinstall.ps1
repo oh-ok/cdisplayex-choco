@@ -1,13 +1,29 @@
 ﻿$ErrorActionPreference = 'Stop';
+
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$fileLocation = Join-Path $toolsDir 'CDisplayExWin32v1.10.33.exe'
-$fileLocation64 = Join-Path $toolsDir 'CDisplayExWin64v1.10.33.exe'
+
+# This downloads the relevant exe from the official source.
+$options32 = @{  "os"="win32" }
+$options64 = @{  "os"="win64" }
+$baseUrl = "http://www.cdisplayex.com/findit.php"
+
+if ([Environment]::Is64BitOperatingSystem) {
+  "Downloading 64bit installer"
+  Invoke-WebRequest -Uri $baseUrl -Method Post -Body $options64 -OutFile "$toolsDir/CDisplayExWin64v$version.exe"
+} else {
+  "Downloading 32bit installer"
+  Invoke-WebRequest -Uri $baseUrl -Method Post -Body $options32 -OutFile "$toolsDir/CDisplayExWin32v$version.exe"
+}
+
+$fileLoc = "CDisplayExWin32v$version.exe"
+$fileLoc64 = "CDisplayExWin64v$version.exe"
+
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
   unzipLocation = $toolsDir
   fileType      = 'EXE'
-  file         = $fileLocation
-  file64    = $fileLocation64
+  file          = Join-Path $toolsDir $fileLoc
+  file64        = Join-Path $toolsDir $fileLoc64
 
   softwareName  = 'cdisplayex*'
   checksum      = '3777afbc649901be6948bcd22f97f1c1d0f77c6375f5a027a88a62a75e5eecda'
