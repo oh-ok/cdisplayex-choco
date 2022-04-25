@@ -3,6 +3,7 @@
   <metadata>
     <id>cdisplayex</id>
     <version>1.10.33</version>
+    <packageSourceUrl>https://github.com/oh-ok/cdisplayex-choco</packageSourceUrl>
     <title>CDisplayEx</title>
     <authors>Henri Gourvest,Progdigy Software S.A.R.L</authors>
     <projectUrl>https://www.cdisplayex.com/</projectUrl>
