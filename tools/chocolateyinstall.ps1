@@ -16,10 +16,9 @@ function Get-SetupExe($bitStr) {
 
   Write-Host "Grabbing latest $bitStr-bit installer from http://www.cdisplayex.com/..."
   $response = Invoke-WebRequest -Uri $baseUrl -Method Post -Body $options -OutFile "$toolsDir/temp.exe" -PassThru
-  $testResponse = $response.Headers["Content-Disposition"] -match '(CDisplayEx.*\.exe)'
-  if ($testResponse) { # Did we download an installer?
-    if ($Matches.0 -eq $fName) { # Make sure it matches the expected above
-      Move-Item -Path "$toolsDir/temp.exe" -Destination $fPath # Rename to be it's original downlaoded filename
+  if ($response.Headers["Content-Disposition"] -match '(CDisplayEx.*\.exe)') { # Did we download an installer?
+    if ($Matches.0 -eq $fName) { # Make sure it matches the expected filename above
+      Move-Item -Path "$toolsDir/temp.exe" -Destination $fPath # Rename to be it's original downloaded filename
       return $fPath
     } else { # Got an installer but the file names are mismatched
       Throw [System.IO.FileNotFoundException] "This version is out of date and no longer available to download from official sources - sorry about that!"
