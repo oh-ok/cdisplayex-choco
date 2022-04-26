@@ -8,13 +8,13 @@ if ($Env:ChocolateyForceX86) {
 
 # Grabs the latest setup files from the official website
 # - Can't use Get-ChocolateyWebFile because we need the -Method Post
-function Get-SetupExe($bitStr) {
-  $options = @{ "os"="win"+ $bitStr }
-  $fName = "CDisplayExWin" + $bitStr + "v" + $version + ".exe"
+function Get-SetupExe() {
+  $options = @{ "os"="win"+ $osBits }
+  $fName = "CDisplayExWin" + $osBits + "v" + $version + ".exe"
   $fPath = Join-Path $toolsDir $fName
   $baseUrl = "http://www.cdisplayex.com/findit.php"
 
-  Write-Host "Grabbing latest $bitStr-bit installer from http://www.cdisplayex.com/..."
+  Write-Host "Grabbing latest $osBits-bit installer from http://www.cdisplayex.com/..."
   $response = Invoke-WebRequest -Uri $baseUrl -Method Post -Body $options -OutFile "$toolsDir/temp.exe" -PassThru
   if ($response.Headers["Content-Disposition"] -match '(CDisplayEx.*\.exe)') { # Did we download an installer?
     if ($Matches.0 -eq $fName) { # Make sure it matches the expected filename above
@@ -32,7 +32,7 @@ $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
   unzipLocation = $toolsDir
   fileType      = 'EXE'
-  file          = Get-SetupExe $osBits
+  file          = Get-SetupExe
 
   softwareName  = 'cdisplayex*'
   checksum      = '3777afbc649901be6948bcd22f97f1c1d0f77c6375f5a027a88a62a75e5eecda'
