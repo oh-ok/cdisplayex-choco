@@ -4,34 +4,21 @@
     <id>cdisplayex</id>
     <version>1.10.33</version>
     <packageSourceUrl>https://github.com/oh-ok/cdisplayex-choco</packageSourceUrl>
-    <title>CDisplayEx</title>
+    <title>CDisplay Ex</title>
     <authors>Henri Gourvest,Progdigy Software S.A.R.L</authors>
     <projectUrl>https://www.cdisplayex.com/</projectUrl>
     <iconUrl>https://www.cdisplayex.com/img/logo.png</iconUrl>
     <licenseUrl>https://www.cdisplayex.com/eula</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <tags>cdisplayex comicreader comic comics cbr cbz cb7</tags>
-    <summary>CDisplay Ex is a light, efficient and Free CBR Reader.</summary>
-    <description>CDisplay Ex is a light, efficient and Free CBR Reader, and it is also the most popular comic book reader. It is able to read all comic book formats (.cbr file, .cbz, .pdf, etc..) and Manga. Everything is designed to give you the best comic reading experience, it load comic books immediately, reading is fluid and comfortable even on slow computer. It uses advanced resize techniques to provide a smooth rendering. </description>
+    <summary>CDisplay Ex is a light, efficient and Free CBR Reader. </summary>
+    <description>Note: This package can only download the latest version of CDisplay Ex, it cannot install historical versions not available on the official website. 
+    
+    CDisplay Ex is a light, efficient and Free CBR Reader, and it is also the most popular comic book reader. It is able to read all comic book formats (.cbr file, .cbz, .pdf, etc..) and Manga. Everything is designed to give you the best comic reading experience, it load comic books immediately, reading is fluid and comfortable even on slow computer. It uses advanced resize techniques to provide a smooth rendering. </description>
     <releaseNotes>
 1.10.33
 
 + Fixed bug when opening a folder, Previous/Next File was not working.
-
-1.10.32
-
-+ Fixed double-page problem on some mangas
-+ Fixed bug when trying to load next/previous file and the folder is empty.
-+ Fixed gesture direction with japanese mode.
-
-1.10.31
-
-+ Fixed: crash when loading application.
-+ Fixed: Folders was not added to history.
-+ Webp library updated to version 5.0 
-+ 7zip library updated to latest version.
-+ Removed unecessary rar5 library.
-+ Fixed various crashs related to cache.
 </releaseNotes>
   </metadata>
   <files>

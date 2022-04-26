@@ -1,29 +1,39 @@
 ﻿$ErrorActionPreference = 'Stop';
-
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-
-# This downloads the relevant exe from the official source.
-$options32 = @{  "os"="win32" }
-$options64 = @{  "os"="win64" }
-$baseUrl = "http://www.cdisplayex.com/findit.php"
-
-if ([Environment]::Is64BitOperatingSystem) {
-  "Downloading 64bit installer"
-  Invoke-WebRequest -Uri $baseUrl -Method Post -Body $options64 -OutFile "$toolsDir/CDisplayExWin64v$version.exe"
-} else {
-  "Downloading 32bit installer"
-  Invoke-WebRequest -Uri $baseUrl -Method Post -Body $options32 -OutFile "$toolsDir/CDisplayExWin32v$version.exe"
+$osBits = Get-ProcessorBits
+if ($Env:ChocolateyForceX86) {
+  $osBits = "32"
 }
 
-$fileLoc = "CDisplayExWin32v$version.exe"
-$fileLoc64 = "CDisplayExWin64v$version.exe"
+
+# Grabs the latest setup files from the official website
+# - Can't use Get-ChocolateyWebFile because we need the -Method Post
+function Get-SetupExe($bitStr) {
+  $options = @{ "os"="win"+ $bitStr }
+  $fName = "CDisplayExWin" + $bitStr + "v" + $version + ".exe"
+  $fPath = Join-Path $toolsDir $fName
+  $baseUrl = "http://www.cdisplayex.com/findit.php"
+
+  Write-Host "Grabbing latest $bitStr-bit installer from http://www.cdisplayex.com/..."
+  $response = Invoke-WebRequest -Uri $baseUrl -Method Post -Body $options -OutFile "$toolsDir/temp.exe" -PassThru
+  $testResponse = $response.Headers["Content-Disposition"] -match '(CDisplayEx.*\.exe)'
+  if ($testResponse) { # Did we download an installer?
+    if ($Matches.0 -eq $fName) { # Make sure it matches the expected above
+      Move-Item -Path "$toolsDir/temp.exe" -Destination $fPath # Rename to be it's original downlaoded filename
+      return $fPath
+    } else { # Got an installer but the file names are mismatched
+      Throw [System.IO.FileNotFoundException] "This version is out of date and no longer available to download from official sources - sorry about that!"
+    }
+  } else { # Got a reponse but no installer
+    Throw [System.IO.FileNotFoundException] "Could not download the CDisplayEx setup file, maybe you're trying to download a version no longer publicly available - sorry about that!"
+  }
+}
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
   unzipLocation = $toolsDir
   fileType      = 'EXE'
-  file          = Join-Path $toolsDir $fileLoc
-  file64        = Join-Path $toolsDir $fileLoc64
+  file          = Get-SetupExe $osBits
 
   softwareName  = 'cdisplayex*'
   checksum      = '3777afbc649901be6948bcd22f97f1c1d0f77c6375f5a027a88a62a75e5eecda'
